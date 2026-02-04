@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
+﻿using Cysharp.Threading.Tasks;
+using System.Threading;
 using UnityEngine;
 
 /// <summary>
@@ -7,10 +7,10 @@ using UnityEngine;
 /// </summary>
 public class CoreBootstrapper : MonoBehaviour
 {
-    private IRobotDataSource _robotDataSource;
+    [SerializeField] private RobotDataSourceConfig config;
     [Header("필수")]
     [SerializeField] private RobotEventChannelSO _robotEventChannelSO;
-  
+
     [Header("Prefabs")]
     [SerializeField] private RobotView view;
     [SerializeField] private RobotMoveView modeler;
@@ -19,7 +19,10 @@ public class CoreBootstrapper : MonoBehaviour
     [SerializeField] private Transform viewRoot;
     [SerializeField] private Transform moveViewRoot;
 
+    private IRobotDataSource _robotDataSource;
+    private CancellationTokenSource cancellationTokenSource;
     private RobotPresenterFactory presenterFactory;
+
     private void Awake()
     {
         var statusSystem = new RobotStatusSystem(30f, 15f);
@@ -29,21 +32,25 @@ public class CoreBootstrapper : MonoBehaviour
 
         var registry = new RobotRegistry(statusSystem, _robotEventChannelSO, presenterFactory);
         var mapper = new RobotDataMapper(registry);
-      
-        _robotDataSource = new FakeRobotDataSource(mapper);
+        cancellationTokenSource = new CancellationTokenSource();
+
+        _robotDataSource = config.Create(mapper);
     }
 
     private void Start()
     {
-        _robotDataSource.RobotStart();
+        _robotDataSource.StartAaync(cancellationTokenSource.Token).Forget();
     }
 
-    private void OnDestroy()
+    private async void OnDestroy()
     {
-        _robotDataSource.RobotStop();
+        cancellationTokenSource.Cancel();
+        if (_robotDataSource != null)
+            await _robotDataSource.StopAaync();
+        cancellationTokenSource.Dispose();  
         presenterFactory.Dispose();
     }
 
-   
+
 
 }

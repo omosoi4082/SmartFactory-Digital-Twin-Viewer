@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using System.Threading;
+using UnityEngine;
 
 public interface IRobotDataSource 
 {
-    void RobotStart();
-    void RobotStop();
+    UniTask StartAaync(CancellationToken ct);
+    UniTask StopAaync();
 }

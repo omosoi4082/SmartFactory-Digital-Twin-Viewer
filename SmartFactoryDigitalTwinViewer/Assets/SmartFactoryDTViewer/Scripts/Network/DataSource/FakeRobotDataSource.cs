@@ -25,19 +25,20 @@ public class FakeRobotDataSource : IRobotDataSource
 
     }
 
-    public void RobotStart()
+    public  UniTask StartAaync(CancellationToken ct)
     {
-        _canceTokenSource=new CancellationTokenSource();   //여기인가? 
-        RunsimulationAsync(_canceTokenSource.Token).Forget();
+        _canceTokenSource=CancellationTokenSource.CreateLinkedTokenSource(ct);  
+      return  RunsimulationAsync(_canceTokenSource.Token);
     }
 
-    public void RobotStop()
+    public  UniTask StopAaync()
     {
         _canceTokenSource?.Cancel();
         _canceTokenSource?.Dispose();
         _canceTokenSource=null;
+        return UniTask.CompletedTask;   
     }
-    private async UniTaskVoid RunsimulationAsync(CancellationToken token)//취소확인
+    private async UniTask RunsimulationAsync(CancellationToken token)//취소확인
     {
         try
         {
