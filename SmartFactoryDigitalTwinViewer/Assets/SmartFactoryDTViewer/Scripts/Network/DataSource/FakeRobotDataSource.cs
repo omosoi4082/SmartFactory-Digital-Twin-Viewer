@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -10,7 +11,7 @@ using UnityEngine;
 /// </summary>
 public class FakeRobotDataSource : IRobotDataSource
 {
-    private readonly RobotDataMapper _dataMapper;
+    private readonly RobotDataQueue _queue;
     private CancellationTokenSource _canceTokenSource;
     private readonly List<string> _robotIds = new()
     {
@@ -19,9 +20,9 @@ public class FakeRobotDataSource : IRobotDataSource
         "Robot-03"
     };
   
-    public FakeRobotDataSource(RobotDataMapper dataMapper)
+    public FakeRobotDataSource(RobotDataQueue queue)
     {
-        _dataMapper = dataMapper ?? throw new ArgumentNullException(nameof(dataMapper));
+        _queue = queue ;
 
     }
 
@@ -47,7 +48,7 @@ public class FakeRobotDataSource : IRobotDataSource
                 foreach (var item in _robotIds)
                 {
                     var dto = CresteFakeDto(item);
-                    _dataMapper.Apply(dto);
+                    _queue.Enquene(dto);
                 }
                 await UniTask.Delay(1000, cancellationToken: token);//1초대기,Delay 중에도 취소 가능
             }

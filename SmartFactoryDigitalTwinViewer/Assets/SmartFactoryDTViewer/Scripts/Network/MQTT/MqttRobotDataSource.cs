@@ -13,13 +13,13 @@ using System.Threading;
 /// </summary>
 public class MqttRobotDataSource : IRobotDataSource
 {
-    private readonly RobotDataMapper _dataMapper;
+    private readonly RobotDataQueue _queue;
     private IMqttClient _mqttClient;
 
 
-    public MqttRobotDataSource(RobotDataMapper dataMapper)
+    public MqttRobotDataSource(RobotDataQueue queue)
     {
-        _dataMapper = dataMapper;
+        _queue = queue;
     }
 
     public async UniTask StartAaync(CancellationToken ct)
@@ -30,16 +30,42 @@ public class MqttRobotDataSource : IRobotDataSource
         _mqttClient.ApplicationMessageReceivedAsync += OnMessageReceived;
         var options = new MqttClientOptionsBuilder().WithTcpServer("localhost", 1883).Build();
 
-        await _mqttClient.ConnectAsync(options,ct);
-        await _mqttClient.SubscribeAsync("robots/telemetry");
+        while (!ct.IsCancellationRequested)
+        {
+            try
+            {
+                await _mqttClient.ConnectAsync(options, ct);
+                await _mqttClient.SubscribeAsync("robots/telemetry");
+                await WaitUntilDisconnected(ct);
+
+            }
+            catch(OperationCanceledException)
+            {
+                break;
+            }
+            catch (Exception ex)
+            {
+                Debug.LogException(ex);
+                await UniTask.Delay(3000, cancellationToken: ct);
+            }
+        }
+        
+    }
+    private async UniTask WaitUntilDisconnected(CancellationToken ct)
+    {
+        while(_mqttClient.IsConnected&&!ct.IsCancellationRequested)
+        {
+            await UniTask.Delay(500, cancellationToken: ct);
+        }
     }
 
     private Task OnMessageReceived(MqttApplicationMessageReceivedEventArgs e)
     {
         var json = Encoding.UTF8.GetString(e.ApplicationMessage.PayloadSegment);
+        Debug.Log($"[MQTT RECEIVED] {json}");
         var dto = JsonUtility.FromJson<RobotMpttDto>(json);
 
-        _dataMapper.Apply(dto);
+        _queue.Enquene(dto);
         return Task.CompletedTask;
     }
 

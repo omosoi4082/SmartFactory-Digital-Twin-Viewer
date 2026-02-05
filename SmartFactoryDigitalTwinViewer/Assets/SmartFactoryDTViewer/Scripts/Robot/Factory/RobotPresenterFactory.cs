@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using UnityEngine;
 
 public class RobotPresenterFactory
 {
@@ -18,7 +18,11 @@ public class RobotPresenterFactory
     public void PresenterGetOrCreate(RobotDataModel model)
     {
         if (_presenters.TryGetValue(model._robotId,out var pr))
-            return ;
+        {
+          Debug.Log($"Robot not found: {model._robotId}");
+            return;
+        }
+           
 
         var viewModel = new RobotViewModel();
         var view = _viewPool.Get();

@@ -11,6 +11,7 @@ public class CoreBootstrapper : MonoBehaviour
     [Header("필수")]
     [SerializeField] private RobotEventChannelSO _robotEventChannelSO;
 
+    [SerializeField] private RobotLivenessSystem _livenessSystem;
     [Header("Prefabs")]
     [SerializeField] private RobotView view;
     [SerializeField] private RobotMoveView modeler;
@@ -22,6 +23,7 @@ public class CoreBootstrapper : MonoBehaviour
     private IRobotDataSource _robotDataSource;
     private CancellationTokenSource cancellationTokenSource;
     private RobotPresenterFactory presenterFactory;
+    private RobotDataUpdateRunner dataRunner;
 
     private void Awake()
     {
@@ -32,14 +34,17 @@ public class CoreBootstrapper : MonoBehaviour
 
         var registry = new RobotRegistry(statusSystem, _robotEventChannelSO, presenterFactory);
         var mapper = new RobotDataMapper(registry);
+        var queue = new RobotDataQueue();
+        dataRunner = new RobotDataUpdateRunner(queue,mapper);
         cancellationTokenSource = new CancellationTokenSource();
-
-        _robotDataSource = config.Create(mapper);
+        _livenessSystem.Initialized(registry);
+        _robotDataSource = config.Create(queue);
     }
 
     private void Start()
     {
         _robotDataSource.StartAaync(cancellationTokenSource.Token).Forget();
+        dataRunner.Start(cancellationTokenSource.Token);
     }
 
     private async void OnDestroy()

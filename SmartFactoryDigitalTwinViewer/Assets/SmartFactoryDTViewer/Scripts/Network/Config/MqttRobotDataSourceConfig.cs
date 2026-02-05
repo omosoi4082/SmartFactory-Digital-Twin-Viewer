@@ -3,9 +3,9 @@
 
 public class MqttRobotDataSourceConfig : RobotDataSourceConfig
 {
-    public override IRobotDataSource Create(RobotDataMapper mapper)
+    public override IRobotDataSource Create(RobotDataQueue queue)
     {
-        return new MqttRobotDataSource(mapper);
+        return new MqttRobotDataSource(queue);
     }
 
 }
