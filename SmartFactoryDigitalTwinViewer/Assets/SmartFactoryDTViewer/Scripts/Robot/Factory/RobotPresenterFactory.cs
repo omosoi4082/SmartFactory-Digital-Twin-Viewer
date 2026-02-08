@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RobotPresenterFactory
@@ -6,29 +7,45 @@ public class RobotPresenterFactory
     private readonly RobotViewPool _viewPool;
     private readonly RobotMoveViewPool _moveViewPool;
     private readonly RobotEventChannelSO _robotEventChannelSO;
-    private Dictionary<string, RobotPresenter> _presenters = new Dictionary<string, RobotPresenter>(); //관리
-    public RobotPresenterFactory(RobotViewPool robotViewPool, RobotMoveViewPool moveViewPool, RobotEventChannelSO channelSO)
+    private readonly ICameraFocus _cameraFocus;
+    private readonly Action<string> _onRequestRefreshLayout;
+    private Dictionary<string, RobotPresenter> _presenters = new Dictionary<string, RobotPresenter>();
+
+    public RobotPresenterFactory(
+        RobotViewPool robotViewPool,
+        RobotMoveViewPool moveViewPool,
+        RobotEventChannelSO channelSO,
+        ICameraFocus cameraFocus,
+        Action<string> onRequestRefreshLayout)
     {
         _viewPool = robotViewPool;
         _moveViewPool = moveViewPool;
         _robotEventChannelSO = channelSO;
+        _cameraFocus = cameraFocus;
+        _onRequestRefreshLayout = onRequestRefreshLayout;
         _robotEventChannelSO.OnRaised += OnRobotUpdated;
     }
 
     public void PresenterGetOrCreate(RobotDataModel model)
     {
-        if (_presenters.TryGetValue(model._robotId,out var pr))
+        if (_presenters.TryGetValue(model._robotId, out _))
         {
-          Debug.Log($"Robot not found: {model._robotId}");
+            Debug.Log($"Robot already present: {model._robotId}");
             return;
         }
-           
 
         var viewModel = new RobotViewModel();
         var view = _viewPool.Get();
+        view.robotId = model._robotId;
         var move = _moveViewPool.Get();
 
-        var presenter = new RobotPresenter( viewModel, view, move);
+        var presenter = new RobotPresenter(
+            model._robotId,
+            viewModel,
+            view,
+            move,
+            _cameraFocus,
+            _onRequestRefreshLayout);
         _presenters.Add(model._robotId, presenter);
     }
 
@@ -44,3 +61,4 @@ public class RobotPresenterFactory
         _robotEventChannelSO.OnRaised -= OnRobotUpdated;
     }
 }
+

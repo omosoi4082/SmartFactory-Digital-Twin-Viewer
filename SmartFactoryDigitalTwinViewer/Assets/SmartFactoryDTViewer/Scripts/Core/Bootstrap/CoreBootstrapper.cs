@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using System;
 using System.Threading;
 using UnityEngine;
 
@@ -19,6 +20,8 @@ public class CoreBootstrapper : MonoBehaviour
     [Header("Scene")]
     [SerializeField] private Transform viewRoot;
     [SerializeField] private Transform moveViewRoot;
+    [SerializeField] private CameraFocusController _cameraFocusController;
+    [SerializeField] private ListRootLayoutController _listLayoutController;
 
     private IRobotDataSource _robotDataSource;
     private CancellationTokenSource cancellationTokenSource;
@@ -30,7 +33,10 @@ public class CoreBootstrapper : MonoBehaviour
         var statusSystem = new RobotStatusSystem(30f, 15f);
         var viewPool = new RobotViewPool(view, viewRoot);
         var moveviewPool = new RobotMoveViewPool(modeler, moveViewRoot);
-        presenterFactory = new RobotPresenterFactory(viewPool, moveviewPool, _robotEventChannelSO);
+       /* var onRefreshLayout = _listLayoutController != null
+            ? (Action<string>)(id => _listLayoutController.RefreshLayout(id))
+            : null;*/
+       // presenterFactory = new RobotPresenterFactory(viewPool, moveviewPool, _robotEventChannelSO, _cameraFocusController, onRefreshLayout);
 
         var registry = new RobotRegistry(statusSystem, _robotEventChannelSO, presenterFactory);
         var mapper = new RobotDataMapper(registry);

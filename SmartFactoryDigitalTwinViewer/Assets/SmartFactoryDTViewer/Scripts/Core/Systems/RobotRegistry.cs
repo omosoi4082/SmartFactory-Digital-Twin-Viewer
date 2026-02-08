@@ -27,6 +27,8 @@ public class RobotRegistry
         {
             robot = new RobotDataModel(robotId);
             robots.Add(robotId, robot);
+
+        
         }
         return robot;
     }
@@ -50,4 +52,5 @@ public class RobotRegistry
     }
 
     public IEnumerable<RobotDataModel> GetAll() => robots.Values;
+
 }
