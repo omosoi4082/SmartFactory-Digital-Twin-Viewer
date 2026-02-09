@@ -62,7 +62,7 @@ public class MqttRobotDataSource : IRobotDataSource
     private Task OnMessageReceived(MqttApplicationMessageReceivedEventArgs e)
     {
         var json = Encoding.UTF8.GetString(e.ApplicationMessage.PayloadSegment);
-        Debug.Log($"[MQTT RECEIVED] {json}");
+      
         var dto = JsonUtility.FromJson<RobotMpttDto>(json);
 
         _queue.Enquene(dto);

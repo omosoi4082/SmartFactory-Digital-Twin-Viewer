@@ -1128,7 +1128,7 @@ GameObject:
   - component: {fileID: 2887124057822280213}
   - component: {fileID: 4555138064361009804}
   m_Layer: 5
-  m_Name: position Y
+  m_Name: rotation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1182,7 +1182,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'position Y :'
+  m_text: 'rotation :'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: afa74a0bbd94c8e4f85f357c41b88c3d, type: 2}
   m_sharedMaterial: {fileID: -3259465718389246243, guid: afa74a0bbd94c8e4f85f357c41b88c3d, type: 2}
@@ -1432,6 +1432,7 @@ GameObject:
   - component: {fileID: 1157871091178245065}
   - component: {fileID: 5955868037468554284}
   - component: {fileID: 3624061877758952784}
+  - component: {fileID: 5500016399783703874}
   m_Layer: 5
   m_Name: main
   m_TagString: Untagged
@@ -1498,6 +1499,50 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5500016399783703874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5367929227079281109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 3624061877758952784}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &5397242379559726541
 GameObject:
   m_ObjectHideFlags: 0
@@ -1922,6 +1967,7 @@ GameObject:
   - component: {fileID: 169599270930354464}
   - component: {fileID: 1480718194398268320}
   - component: {fileID: 1391758658324985723}
+  - component: {fileID: 5908092269727141019}
   m_Layer: 5
   m_Name: listItem
   m_TagString: Untagged
@@ -2028,6 +2074,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!114 &5908092269727141019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7836784146627338028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c83707bea291f14dbc99ecb3020aadd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RobotView
+  robotId: 
+  listitem: {fileID: 2896482952991316377}
+  main: {fileID: 5500016399783703874}
+  mainHeight: 64
+  robotIdtext: {fileID: 8055644273938026193}
+  online: {fileID: 2681368241114734141}
+  on: {r: 0.0130934715, g: 1, b: 0, a: 1}
+  off: {r: 0.38679248, g: 0.38679248, b: 0.38679248, a: 1}
+  details: {fileID: 8258925037252642454}
+  detailsHeight: 160
+  px: {fileID: 1183005183048386222}
+  pz: {fileID: 3092981652085336540}
+  rotation: {fileID: 7173560164044540933}
+  battery: {fileID: 969998814426772154}
+  filled: {fileID: 4399480482670461907}
+  hasPayload: {fileID: 7174639603543470129}
 --- !u!1 &8130405726856394431
 GameObject:
   m_ObjectHideFlags: 0

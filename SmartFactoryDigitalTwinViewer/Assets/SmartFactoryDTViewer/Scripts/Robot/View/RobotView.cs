@@ -1,10 +1,11 @@
-
+﻿
 using UnityEngine;
 using UnityEngine.EventSystems;
 using R3;
 using TMPro;
 using UnityEngine.UI;
 using System;
+using UnityEngine.Splines;
 
 public class RobotView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -15,13 +16,14 @@ public class RobotView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     [SerializeField] private float mainHeight = 64f;
     [SerializeField] private TextMeshProUGUI robotIdtext;
     [SerializeField] private Image online;
-    Color on;
-    Color off;
+    [SerializeField] Color on;
+    [SerializeField] Color off;
 
     //상세
     [SerializeField] private GameObject details;
     [SerializeField] private float detailsHeight = 160f;
-    [SerializeField] private TextMeshProUGUI px,py,pz;
+    [SerializeField] private TextMeshProUGUI px,pz;
+    [SerializeField] private TextMeshProUGUI rotation;
     [SerializeField] private TextMeshProUGUI battery;
     [SerializeField] private Image filled;
     [SerializeField] private Image hasPayload;
@@ -32,6 +34,9 @@ public class RobotView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public Action<RobotView> OnClicked;
     public Action<RobotView> OnHoverEnter;
     public Action<RobotView> OnHoverExit;
+
+    bool preAlive;
+    bool preHasPayload;
 
     private void Start()
     {
@@ -53,9 +58,27 @@ public class RobotView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void Bind(RobotViewModel vmodel)
     {
-        vmodel.positionText.Subscribe(value =>
+        vmodel.robotdata.Subscribe(value =>
         {
-            px.text = value;
+            robotIdtext.text = value._robotId;
+            px.text = value._position.x.ToString("F1");
+            pz.text = value._position.z.ToString("F1");
+            rotation.text = value._rotation.ToString("F1");
+
+            if(preAlive!= value.isAlive)
+            {
+                online.color = value.isAlive ? on : off;
+                preAlive = value.isAlive;
+            }
+            if (preHasPayload != value._hasPayload)
+            {
+                hasPayload.color = value._hasPayload ? on : off;
+                preHasPayload = value._hasPayload;
+            }
+
+            battery.text=value._batteryLevel.ToString("F1");
+            filled.fillAmount = value._batteryLevel / 100f;
+
         }).AddTo(this);
     }
 }

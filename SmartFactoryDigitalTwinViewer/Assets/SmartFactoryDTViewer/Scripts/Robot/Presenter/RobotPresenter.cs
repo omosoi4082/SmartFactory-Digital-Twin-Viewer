@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 /// <summary>
 /// 로봇1대에 1개 로직. View ↔ Move 호버·클릭 연동.
@@ -15,6 +15,7 @@ public class RobotPresenter
     private bool _viewHovered;
     private bool _moveHovered;
 
+    private bool _select;
     public RobotPresenter(
         string robotId,
         RobotViewModel robotViewModel,
@@ -36,24 +37,32 @@ public class RobotPresenter
 
         _modeler.OnHoverEnter += _ => { _moveHovered = true; UpdateOutline(); };
         _modeler.OnHoverExit += _ => { _moveHovered = false; UpdateOutline(); };
-        _modeler.OnClicked += _ => OnMoveClicked();
+        _modeler.OnClicked += _ => OnViewClicked();
     }
 
     private void UpdateOutline()
     {
+        if (_select) return;
         _modeler.SetOutlineVisible(_viewHovered || _moveHovered);
     }
 
     private void OnViewClicked()
     {
-        _cameraFocus?.Focus(_modeler.transform.position);
-        _modeler.SetOutlineVisible(true);
-    }
-
-    private void OnMoveClicked()
-    {
-        _view.SetExpended(true);
-        _onRequestRefreshLayout?.Invoke(_robotId);
+        _select = !_select;
+        if (_select)
+        {
+            _cameraFocus?.Focus(_modeler.transform.position);
+            _modeler.SetOutlineVisible(true);
+            _view.SetExpended(true);
+            _onRequestRefreshLayout?.Invoke(_robotId);
+        }
+        else
+        {
+            _modeler.SetOutlineVisible(false);
+            _view.SetExpended(false);
+            _onRequestRefreshLayout?.Invoke(_robotId);
+        }
+      
     }
 
     public void OnRobotUpdated(RobotDataModel model)

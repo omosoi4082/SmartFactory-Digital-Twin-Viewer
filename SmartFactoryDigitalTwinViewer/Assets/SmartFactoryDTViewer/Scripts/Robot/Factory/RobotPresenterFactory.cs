@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,7 +30,6 @@ public class RobotPresenterFactory
     {
         if (_presenters.TryGetValue(model._robotId, out _))
         {
-            Debug.Log($"Robot already present: {model._robotId}");
             return;
         }
 
