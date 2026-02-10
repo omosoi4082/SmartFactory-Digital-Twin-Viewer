@@ -118,17 +118,3 @@ SmartFactoryDTViewer/
 `CoreBootstrapper`에서 `config`에 원하는 데이터 소스 Config를 할당하면 됩니다.
 
 ---
-
-## 씬 설정 요약
-
-1. **CoreBootstrapper**: Config, EventChannel, LivenessSystem, Prefab, viewRoot, moveViewRoot, CameraFocusController, ListLayoutController 할당
-2. **CameraFocusController**: 빈 GameObject에 추가, Target Camera 설정
-3. **RobotLivenessSystem**: timeout 설정 (기본 3초)
-4. **RobotMoveView**: 클릭/호버를 위해 Collider 필수
-
----
-
-## 관련 문서
-
-- `View_Move_연동_가이드.md` — 리스트 ↔ 3D 로봇 상호작용
-- `DATA_SOURCE_전환_가이드.md` — Fake → MQTT/REST 전환 방법
