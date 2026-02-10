@@ -1,4 +1,4 @@
-﻿
+
 using UnityEngine;
 using UnityEngine.EventSystems;
 using R3;
@@ -50,7 +50,7 @@ public class RobotView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         OnClicked?.Invoke(this);
     }
-    public void SetExpended(bool exp)
+    public void SetExpanded(bool exp)
     {
         isExpanded = exp;
         details.SetActive(exp);

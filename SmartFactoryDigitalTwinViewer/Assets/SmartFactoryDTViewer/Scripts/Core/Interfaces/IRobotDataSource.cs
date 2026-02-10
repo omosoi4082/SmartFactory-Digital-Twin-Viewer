@@ -1,9 +1,12 @@
-﻿using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using System.Threading;
 using UnityEngine;
 
-public interface IRobotDataSource 
+/// <summary>
+/// 로봇 센서 데이터 소스 인터페이스 (MQTT, REST, Fake 등).
+/// </summary>
+public interface IRobotDataSource
 {
-    UniTask StartAaync(CancellationToken ct);
-    UniTask StopAaync();
+    UniTask StartAsync(CancellationToken ct);
+    UniTask StopAsync();
 }

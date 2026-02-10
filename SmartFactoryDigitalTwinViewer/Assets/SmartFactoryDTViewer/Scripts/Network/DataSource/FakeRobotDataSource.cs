@@ -19,36 +19,36 @@ public class FakeRobotDataSource : IRobotDataSource
         "Robot-02",
         "Robot-03"
     };
-  
+
     public FakeRobotDataSource(RobotDataQueue queue)
     {
-        _queue = queue ;
+        _queue = queue;
 
     }
 
-    public  UniTask StartAaync(CancellationToken ct)
+    public UniTask StartAsync(CancellationToken ct)
     {
-        _canceTokenSource=CancellationTokenSource.CreateLinkedTokenSource(ct);  
-      return  RunsimulationAsync(_canceTokenSource.Token);
+        _canceTokenSource = CancellationTokenSource.CreateLinkedTokenSource(ct);
+        return RunsimulationAsync(_canceTokenSource.Token);
     }
 
-    public  UniTask StopAaync()
+    public UniTask StopAsync()
     {
         _canceTokenSource?.Cancel();
         _canceTokenSource?.Dispose();
-        _canceTokenSource=null;
-        return UniTask.CompletedTask;   
+        _canceTokenSource = null;
+        return UniTask.CompletedTask;
     }
     private async UniTask RunsimulationAsync(CancellationToken token)//취소확인
     {
         try
         {
-            while(!token.IsCancellationRequested)//취소 신호
+            while (!token.IsCancellationRequested)//취소 신호
             {
                 foreach (var item in _robotIds)
                 {
                     var dto = CresteFakeDto(item);
-                    _queue.Enquene(dto);
+                    _queue.Enqueue(dto);
                 }
                 await UniTask.Delay(1000, cancellationToken: token);//1초대기,Delay 중에도 취소 가능
             }

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using MQTTnet;
 using MQTTnet.Client;
 using System.Text;
@@ -22,7 +22,7 @@ public class MqttRobotDataSource : IRobotDataSource
         _queue = queue;
     }
 
-    public async UniTask StartAaync(CancellationToken ct)
+    public async UniTask StartAsync(CancellationToken ct)
     {
        var factory=new MqttFactory();
         _mqttClient=factory.CreateMqttClient();
@@ -65,11 +65,11 @@ public class MqttRobotDataSource : IRobotDataSource
       
         var dto = JsonUtility.FromJson<RobotMpttDto>(json);
 
-        _queue.Enquene(dto);
+        _queue.Enqueue(dto);
         return Task.CompletedTask;
     }
 
-    public async UniTask StopAaync()
+    public async UniTask StopAsync()
     {
        if(_mqttClient != null&&_mqttClient.IsConnected) {
             await _mqttClient.DisconnectAsync();

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 /// <summary>
 /// 로봇1대에 1개 로직. View ↔ Move 호버·클릭 연동.
@@ -53,13 +53,13 @@ public class RobotPresenter
         {
             _cameraFocus?.Focus(_modeler.transform.position);
             _modeler.SetOutlineVisible(true);
-            _view.SetExpended(true);
+            _view.SetExpanded(true);
             _onRequestRefreshLayout?.Invoke(_robotId);
         }
         else
         {
             _modeler.SetOutlineVisible(false);
-            _view.SetExpended(false);
+            _view.SetExpanded(false);
             _onRequestRefreshLayout?.Invoke(_robotId);
         }
       

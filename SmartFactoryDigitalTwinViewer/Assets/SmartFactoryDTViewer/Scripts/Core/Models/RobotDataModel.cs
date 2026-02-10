@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 public enum RobotState
 {
@@ -50,6 +50,8 @@ public class RobotDataModel
 
     public void MarkDisconnected()
     {
-        isAlive = false;    
+        if (!isAlive) return;
+        isAlive = false;
+        onChanged?.Invoke(this);
     }
 }

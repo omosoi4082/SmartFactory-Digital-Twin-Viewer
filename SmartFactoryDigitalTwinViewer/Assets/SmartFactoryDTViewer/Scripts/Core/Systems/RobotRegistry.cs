@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -23,13 +23,11 @@ public class RobotRegistry
 
     public RobotDataModel GetOrCreate(string robotId)
     {
-        if (!robots.TryGetValue(robotId, out var robot))
-        {
-            robot = new RobotDataModel(robotId);
-            robots.Add(robotId, robot);
+        if (robots.TryGetValue(robotId, out var existing))
+            return existing;
 
-        
-        }
+        var robot = new RobotDataModel(robotId);
+        robots.Add(robotId, robot);
         return robot;
     }
 
